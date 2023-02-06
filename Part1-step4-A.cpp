@@ -2,7 +2,7 @@
 using namespace std;
 #define ll long long
 struct SegmentTree{
-//private:
+private:
     int sz=1,skip=0;vector<ll>seg;
     ll merge(ll a,ll b)
     {
@@ -39,7 +39,7 @@ struct SegmentTree{
         int mid=(l+r)/2;
         return merge(query(l,mid,2*node+1,lx,rx),query(mid+1,r,2*node+2,lx,rx));
     }
-//public:
+public:
     SegmentTree(int n)
     {
         while(sz<n)sz*=2;
