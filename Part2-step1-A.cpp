@@ -4,11 +4,15 @@ using namespace std;
 struct SegmentTree{
 private:
     int sz=1;vector<ll>seg;
+    ll merge(ll a,ll b)
+    {
+        return a+b;
+    }
     void update(int l,int r,int node,int lx,int rx,ll val)
     {
         if(l>=lx&&r<=rx)
         {
-            seg[node]+=val;
+            seg[node]=merge(seg[node],val);
             return;
         }
         if(r<lx||l>rx)
@@ -28,9 +32,9 @@ private:
         int mid=(l+r)/2;
         if(idx<=mid)
         {
-            return query(l,mid,2*node+1,idx)+seg[node];
+            return merge(query(l,mid,2*node+1,idx),seg[node]);
         }
-        return query(mid+1,r,2*node+2,idx)+seg[node];
+        return merge(query(mid+1,r,2*node+2,idx),seg[node]);
     }
 public:
     SegmentTree(int n)
