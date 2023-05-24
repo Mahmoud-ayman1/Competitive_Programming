@@ -7,7 +7,7 @@ namespace combinatorics
         if(x<0||y>x)return(0);
         return(fac[x]*finv[y]%MOD*finv[x-y]%MOD);
     }
-    ll power(ll b,ll n)
+    ll powmod(ll b,ll n)
     {
         b%=MOD;
         ll s=1;
@@ -18,6 +18,17 @@ namespace combinatorics
             n/=2;
         }
         return s;
+    }
+    ll power(ll a,ll b)
+    {
+        ll ret=1;
+        while(b>0)
+        {
+            if(b&1)ret*=a;
+            a*=a;
+            b/=2;
+        }
+        return ret;
     }
     void init(int n,ll mod)
     {
@@ -32,7 +43,7 @@ namespace combinatorics
     }
     ll Inv(int x)
     {
-        return power(x,MOD-2);
+        return powmod(x,MOD-2);
     }
 };
 using namespace combinatorics;
