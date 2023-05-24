@@ -83,4 +83,8 @@ public:
     {
         return string(d.begin(),d.end());
     }
+    pair<int,int>GetHash()
+    {
+        return {h1,h2};
+    }
 };
