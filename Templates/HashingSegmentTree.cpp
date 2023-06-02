@@ -81,3 +81,7 @@ public:
         return ret;
     }
 };
+bool isPalindrome(HashingSegmentTree &a,HashingSegmentTree &b,int &l,int &r,int &n)
+{
+    return (a.query(l,r)==b.query(n-r+1,n-l+1));
+}
