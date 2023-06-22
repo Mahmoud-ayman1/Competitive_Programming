@@ -1,18 +1,29 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define ll long long
+#define int long long
 struct SegmentTree{
 private:
-    int sz;vector<int>seg;
-    int merge(int a,int b)
+    struct node{
+        int pre,suf,mx,sum;
+        node():pre(0),suf(0),mx(0),sum(0){}
+        node(int v):sum(v),mx(max(v, 0LL)),suf(max(v, 0LL)),pre(max(v, 0LL)){}
+    };
+    int sz;vector<node>seg;
+    node merge(node a,node b)
     {
-        return max(a,b);
+        node ret;
+        ret.sum=a.sum+b.sum;
+        ret.pre=max(a.pre,a.sum+b.pre);
+        ret.suf=max(b.suf,b.sum+a.suf);
+        ret.mx=max({a.mx,b.mx,a.suf+b.pre});
+        return ret;
     }
     void update(int l,int r,int node,int idx,int val)
     {
         if(l==r)
         {
-            seg[node]=val;
+            seg[node]={val};
             return;
         }
         int mid=(l+r)/2;
@@ -26,35 +37,20 @@ private:
         }
         seg[node]=merge(seg[2*node+1],seg[2*node+2]);
     }
-    int query(int l,int r,int node,int k)
-    {
-        if(l==r)
-        {
-            return l;
-        }
-        int lft=seg[2*node+1];
-        int mid=(l+r)/2;
-        if(k<=lft)
-        {
-            return query(l,mid,2*node+1,k);
-        }
-        return query(mid+1,r,2*node+2,k);
-    }
+
 public:
-    SegmentTree(int n)
-    {
+    SegmentTree(int n){
         sz=1;
         while(sz<n)sz*=2;
-        seg=vector<int>(sz*2);
+        seg=vector<node>(sz*2);
     }
     void update(int idx,int val)
     {
         update(0,sz-1,0,idx,val);
     }
-    int query(int k)
+    int query()
     {
-        if(seg[0]<k)return -1;
-        return query(0,sz-1,0,k);
+        return seg[0].mx;
     }
 };
 signed main()
@@ -67,19 +63,12 @@ signed main()
         int x;cin>>x;
         tree.update(i,x);
     }
+    cout<<tree.query()<<'\n';
     while(q--)
     {
-        int op;cin>>op;
-        if(op==1)
-        {
-            int idx,val;cin>>idx>>val;
-            tree.update(idx,val);
-        }
-        else
-        {
-            int k;cin>>k;
-            cout<<tree.query(k)<<'\n';
-        }
+        int idx,val;cin>>idx>>val;
+        tree.update(idx,val);
+        cout<<tree.query()<<'\n';
     }
     return 0;
 }
