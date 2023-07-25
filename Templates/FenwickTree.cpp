@@ -1,7 +1,7 @@
 const int N=1e5+5;
 struct FenwickTree{
-    int bit[N]={};
-    void update(int idx,int val)
+    ll bit[N]={};
+    void add(int idx,ll val)
     {
         while(idx<N)
         {
@@ -9,9 +9,9 @@ struct FenwickTree{
             idx+=idx&-idx;
         }
     }
-    int query(int idx)
+    ll query(int idx)
     {
-        int ret=0;
+        ll ret=0;
         while(idx>0)
         {
             ret+=bit[idx];
