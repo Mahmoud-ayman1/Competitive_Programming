@@ -1,13 +1,13 @@
 const int N=1e5+5;
 struct KMP{
     int longestPrefix[N]={};vector<int>ans;
-    void calcPrefix(string s)
+    void calcPrefix(string patern)
     {
-        int n=s.size();
+        int n=patern.size();
         for(int i=1,idx=0;i<n;i++)
         {
-            while(idx>0&&s[idx]!=s[i])idx=longestPrefix[idx-1];
-            if(s[i]==s[idx])idx++;
+            while(idx>0&&patern[idx]!=patern[i])idx=longestPrefix[idx-1];
+            if(patern[i]==patern[idx])idx++;
             longestPrefix[i]=idx;
         }
     }
