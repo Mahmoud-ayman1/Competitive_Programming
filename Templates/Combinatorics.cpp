@@ -4,8 +4,13 @@ namespace combinatorics
     vector<ll> fac,inv,finv;
     ll nCr(ll x,ll y)
     {
-        if(x<0||y>x)return(0);
+        if(x<0||y>x||y<0)return(0);
         return(fac[x]*finv[y]%MOD*finv[x-y]%MOD);
+    }
+    ll nPr(ll x,ll y)
+    {
+        if(x<0||y>x||y<0)return 0;
+        return fac[x]*finv[x-y]%MOD;
     }
     ll power(ll b,ll n)
     {
@@ -30,6 +35,22 @@ namespace combinatorics
         for(ll i=2;i<=n;++i)inv[i]=MOD-MOD/i*inv[MOD%i]%MOD;
         for(ll i=2;i<=n;++i)finv[i]=finv[i-1]*inv[i]%MOD;
     }
+    ll mul(ll a,ll b)
+    {
+        return ((a%MOD)*(b%MOD))%MOD;
+    }
+    ll add(ll a,ll b)
+    {
+        return ((a%MOD)+(b%MOD))%MOD;
+    }
+    ll sub(ll a,ll b)
+    {
+        return (((a-b)%MOD)+MOD)%MOD;
+    }
+    ll divide(ll a,ll b)
+    {
+       return mul(a,power(b,MOD-2));
+    }
     ll Inv(int x)
     {
         return power(x,MOD-2);
@@ -37,6 +58,10 @@ namespace combinatorics
     ll catalan(int n)
     {
         return (nCr(2*n,n)*Inv(n+1))%MOD;
+    }
+    ll StarsAndPars(ll n,ll k)
+    {
+        return nCr(n+k-1,k-1);
     }
 };
 using namespace combinatorics;
