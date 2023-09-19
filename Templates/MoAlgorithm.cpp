@@ -53,7 +53,7 @@ signed main()
     for(int i=0;i<q;i++)
     {
         int l,r;cin>>l>>r;
-        queries[i]=query(++l,++r,i);
+        queries[i]=query(l,r,i);
     }
     MO_process();
     for(int i=0;i<q;i++)
