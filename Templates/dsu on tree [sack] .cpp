@@ -41,9 +41,9 @@ void sack(int node,int par,bool keep)
         sack(bigCh,node,1);
         swap(subTree[node],subTree[bigCh]);
     }
+    // add information of node
     subTree[node].push_back(node);
     m[c[node]]++;
-    // add information of node
     for(auto it:adj[node])
     {
         if(it!=par&&it!=bigCh)
