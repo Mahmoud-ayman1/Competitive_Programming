@@ -48,6 +48,21 @@ void sieve()
         }
     }
 }
+vector<bool>isPrime(N,1);vector<int>primes;
+void linearSieve()
+{
+    isPrime[0]=isPrime[1]=0;
+    for(ll i=2;i<N;i++)
+    {
+        if(isPrime[i]) primes.push_back(i);
+        for(auto it:primes)
+        {
+            if(i*it>=N) break;
+            isPrime[i*it]=0;
+            if(i%it==0) break;
+        }
+    }
+}
 vector<pair<ll,ll>> primeFactorze(ll n)
 {
     vector<pair<ll,ll>> arr;
