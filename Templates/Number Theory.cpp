@@ -94,6 +94,22 @@ ll powmod(ll x, ll y)
     }
     return res;
 }
+ll add(ll a,ll b)
+{
+    return ((a%mod)+(b%mod))%mod;
+}
+ll mul(ll a,ll b)
+{
+    return ((a%mod)*(b%mod))%mod;
+}
+ll sub(ll a,ll b)
+{
+    return ((((a%mod)-(b%mod))%mod)+mod)%mod;
+}
+ll divide(ll a,ll b)
+{
+    return mul(a,powmod(b,mod-2));
+}
 signed main()
 {
     ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
