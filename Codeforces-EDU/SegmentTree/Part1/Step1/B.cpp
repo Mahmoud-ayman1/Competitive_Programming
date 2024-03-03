@@ -1,90 +1,102 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define ll long long
-#define int long long
-const int N=2e5;
-ll s[2*N];
-struct segmentTree
-{
-    int sz;vector<int>seg;int ret=INT_MAX;
-    segmentTree(int n)
+struct SegmentTree{
+private:
+#define L 2*node+1
+#define R 2*node+2
+#define mid (l+r>>1)
+    int sz;vector<ll>seg;ll skip=LLONG_MAX;
+    ll merge(ll x,ll y)
     {
-        sz=1;
-        while(sz<n)sz*=2;
-        seg.assign(2*sz,0);
+        return min(x,y);
     }
-    int merge(int a,int b)
-    {
-        return min(a,b);
-    }
-    void build(int l,int r,int node)
+    void build(int l,int r,int node,vector<ll>&arr)
     {
         if(l==r)
         {
-            seg[node]=s[l];
+            if(l<arr.size())
+            {
+                seg[node]=arr[l];
+            }
             return;
         }
-        int mid=(l+r)/2;
-        build(l,mid,2*node);
-        build(mid+1,r,2*node+1);
-        seg[node]=merge(seg[2*node],seg[2*node+1]);
+        build(l,mid,L,arr);
+        build(mid+1,r,R,arr);
+        seg[node]=merge(seg[L],seg[R]);
     }
-    void update(int l,int r,int node,int idx,int val)
+    void update(int l,int r,int node,int idx,ll val)
     {
         if(l==r)
         {
             seg[node]=val;
             return;
         }
-        int mid=(l+r)/2;
-        if(mid<idx)
+        if(idx<=mid)
         {
-            update(mid+1,r,2*node+1,idx,val);
+            update(l,mid,L,idx,val);
         }
         else
         {
-            update(l,mid,2*node,idx,val);
+            update(mid+1,r,R,idx,val);
         }
-        seg[node]=merge(seg[2*node],seg[2*node+1]);
+        seg[node]=merge(seg[L],seg[R]);
     }
-    int query(int l,int r,int node,int lx,int rx)
+    ll query(int l,int r,int node,int lq,int rq)
     {
-        if(l>rx||r<lx)
+        if(r<lq||l>rq)
         {
-            return ret;
+            return skip;
         }
-        if(l>=lx&&r<=rx)
+        if(l>=lq&&r<=rq)
         {
             return seg[node];
         }
-        int mid=(l+r)/2;
-        int a=query(l,mid,2*node,lx,rx);
-        int b=query(mid+1,r,2*node+1,lx,rx);
-        return merge(a,b);
+        ll lft=query(l,mid,L,lq,rq);
+        ll rgt=query(mid+1,r,R,lq,rq);
+        return merge(lft,rgt);
     }
+public:
+    SegmentTree(vector<ll>&arr)
+    {
+        sz=1;int n=arr.size();
+        while(sz<n) sz*=2;
+        seg=vector<ll>(sz*2,skip);
+        build(0,sz-1,0,arr);
+    }
+    void update(int idx,ll val)
+    {
+        update(0,sz-1,0,idx,val);
+    }
+    ll query(int l,int r)
+    {
+        return query(0,sz-1,0,l,r);
+    }
+#undef L
+#undef R
 };
 signed main()
 {
     ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
     int n,q;cin>>n>>q;
-    for(int i=1;i<=n;i++)
+    vector<ll>v(n);
+    for(int i=0;i<n;i++)
     {
-        cin>>s[i];
+        cin>>v[i];
     }
-    segmentTree tree(n);
-    tree.build(1,n,1);
+    SegmentTree tree(v);
     while(q--)
     {
         int op;cin>>op;
         if(op==1)
         {
-            int idx,val;cin>>idx>>val;
-            tree.update(1,n,1,idx+1,val);
+            ll idx,val;cin>>idx>>val;
+            tree.update(idx,val);
         }
         else
         {
             int l,r;cin>>l>>r;
-            cout<<tree.query(1,n,1,l+1,r)<<'\n';
+            cout<<tree.query(l,r-1)<<'\n';
         }
     }
     return 0;
