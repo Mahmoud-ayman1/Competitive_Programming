@@ -1,9 +1,13 @@
-const int N=1e5+5;
 struct FenwickTree{
-    ll bit[N]={};
-    void add(int idx,ll val)
+    vector<ll>bit;int sz;
+    FenwickTree(int n)
     {
-        while(idx<N)
+        sz=n+1;
+        bit=vector<ll>(sz);
+    }
+    void update(int idx,ll val)
+    {
+        while(idx<sz)
         {
             bit[idx]+=val;
             idx+=idx&-idx;
