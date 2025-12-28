@@ -2,50 +2,49 @@
 using namespace std;
 #define ll long long
 #define int long long
-const int N=505,OO=1e18;
+const int N=501,OO=1e18;
 int n,m,cap[N][N];vector<int>par,adj[N];
- 
-int bfs(int s, int t, vector<int>& parent) {
-    fill(parent.begin(), parent.end(), -1);
-    parent[s] = -2;
-    queue<pair<int, int>> q;
-    q.push({s, OO});
- 
-    while (!q.empty()) {
-        int cur = q.front().first;
-        int flow = q.front().second;
+int getFlow(int src,int sink)
+{
+    fill(par.begin(),par.end(),-1);
+    par[src]=-2;
+    queue<pair<int,int>>q;
+    q.push({src,OO});
+    while(!q.empty())
+    {
+        int node=q.front().first;
+        int flow=q.front().second;
         q.pop();
- 
-        for (int next : adj[cur]) {
-            if (parent[next] == -1 && cap[cur][next]) {
-                parent[next] = cur;
-                int new_flow = min(flow, cap[cur][next]);
-                if (next == t)
-                    return new_flow;
-                q.push({next, new_flow});
+        for(auto it:adj[node])
+        {
+            if(par[it]==-1&&cap[node][it])
+            {
+                par[it]=node;
+                int newFlow=min(flow,cap[node][it]);
+                if(it==sink) return newFlow;
+                q.push({it,newFlow});
             }
         }
     }
- 
     return 0;
 }
- 
-int maxFlow(int s, int t) {
-    int flow = 0;
-    vector<int> parent(n+5);
-    int new_flow;
- 
-    while (new_flow = bfs(s, t, parent)) {
-        flow += new_flow;
-        int cur = t;
-        while (cur != s) {
-            int prev = parent[cur];
-            cap[prev][cur] -= new_flow;
-            cap[cur][prev] += new_flow;
-            cur = prev;
+int maxFlow(int src,int sink)
+{
+    int flow=0;
+    par=vector<int>(n+1);
+    int nxt;
+    while(nxt=getFlow(src,sink))
+    {
+        flow+=nxt;
+        int cur=sink;
+        while(cur!=src)
+        {
+            int u=par[cur],v=cur;
+            cap[u][v]-=nxt;
+            cap[v][u]+=nxt;
+            cur=u;
         }
     }
- 
     return flow;
 }
 signed main()
